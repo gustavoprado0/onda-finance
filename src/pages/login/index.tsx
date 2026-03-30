@@ -14,12 +14,14 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginSchema) => {
+  const onSubmit = async (data: LoginSchema) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
     login(data.email);
     navigate("/dashboard");
   };
@@ -27,14 +29,14 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/40">
       <div className="w-full max-w-sm space-y-6">
-        
+
         <div className="text-center">
           <h1 className="text-2xl font-bold">Bem-vindo</h1>
           <p className="text-sm text-muted-foreground">
             Entre com sua conta para continuar
           </p>
         </div>
-  
+
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4 border bg-background p-6 rounded-2xl shadow-sm"
@@ -47,7 +49,7 @@ export default function Login() {
               </p>
             )}
           </div>
-  
+
           <div className="space-y-2">
             <Input
               type="password"
@@ -60,9 +62,9 @@ export default function Login() {
               </p>
             )}
           </div>
-  
-          <Button type="submit" className="w-full">
-            Entrar
+
+          <Button type="submit" className="w-full cursor-pointer" disabled={isSubmitting}>
+            {isSubmitting ? "Entrando..." : "Entrar"}
           </Button>
         </form>
       </div>
