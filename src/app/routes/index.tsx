@@ -1,9 +1,9 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import ProtectedRoute from "./protected-route";
+import AppLayout from "../layouts/AppLayout";
 import Login from "../../pages/login";
 import Dashboard from "../../pages/dashboard";
 import Transfer from "../../pages/transfer";
-
 
 export const router = createBrowserRouter([
   {
@@ -12,22 +12,18 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Login />, // opcional (redirect depois)
+    element: <Navigate to="/dashboard" replace />,
   },
   {
-    path: "/dashboard",
+    path: "/",
     element: (
       <ProtectedRoute>
-        <Dashboard />
+        <AppLayout />
       </ProtectedRoute>
     ),
-  },
-  {
-    path: "/transfer",
-    element: (
-      <ProtectedRoute>
-        <Transfer />
-      </ProtectedRoute>
-    ),
+    children: [
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "transfer", element: <Transfer /> },
+    ],
   },
 ]);

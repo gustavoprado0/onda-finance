@@ -5,9 +5,9 @@ import type { JSX } from "react";
 export default function ProtectedRoute({ children }: { children: JSX.Element }) {
   const user = useAuthStore((state) => state.user);
 
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
+    if (!user) {
+      return <Navigate to="/login" replace />;
+    }
 
   return children;
 }
