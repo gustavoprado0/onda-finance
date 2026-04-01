@@ -2,7 +2,7 @@
 
 Aplicação web de gestão financeira pessoal, desenvolvida como desafio técnico front-end.
 
-🔗 **[Acesse a aplicação ao vivo →](https://onda-finance.vercel.app)**
+🔗 **[Acesse a aplicação ao vivo →](https://onda-finance-eight.vercel.app/login)**
 
 ---
 
@@ -128,25 +128,30 @@ Isso permite substituir o adapter por chamadas HTTP reais sem alterar nenhum ser
 
 ## Testes
 
-Cobertura dos principais fluxos com **Vitest + React Testing Library**:
+### Login
 
-```bash
-npm run test
-```
+-   Renderização
+-   Validação
+-   Fluxo completo
 
-### O que está testado
+### Auth Store
 
-**`login.test.tsx`**
-- Renderização dos campos e botão
-- Validação de e-mail inválido
-- Validação de senha curta
-- Ausência de erros com dados válidos
-- Fluxo completo: login → estado do store atualizado → redirecionamento
+-   Estado inicial
+-   Login
+-   Logout
 
-**`auth.store.test.ts`**
-- Estado inicial
-- Ação `login`
-- Ação `logout`
+### Dashboard
+
+-   Renderização dos cards
+-   Cálculo de saldo
+-   Lista de transações
+-   Estado vazio
+
+### Transferência
+
+-   Renderização
+-   Validação
+-   Submissão com sucesso
 
 ---
 
