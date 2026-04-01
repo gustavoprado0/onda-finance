@@ -2,7 +2,7 @@
 
 Aplicação web de gestão financeira pessoal, desenvolvida como desafio técnico front-end.
 
-🔗 **[Acesse a aplicação ao vivo →](https://onda-finance-eight.vercel.app/login)**
+🔗 **[Acesse a aplicação ao vivo →](https://onda-finance-eight.vercel.app/)**
 
 ---
 
