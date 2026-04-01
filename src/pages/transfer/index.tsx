@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useAuthStore } from "../../store/auth.store";
 import { useQueryClient } from "@tanstack/react-query";
 import { createTransaction } from "../../services/transactions";
@@ -8,18 +7,8 @@ import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { toast } from "sonner";
 import { ArrowRight, Send, ShieldCheck } from "lucide-react";
-
-const schema = z.object({
-  recipient: z.string().min(1, "Informe o destinatário"),
-  title: z.string().min(1, "Informe a descrição"),
-  amount: z
-    .number({
-      message: "Informe um valor",
-    })
-    .min(0.01, "Valor deve ser maior que zero"),
-});
-
-type FormData = z.infer<typeof schema>;
+import { transferSchema } from "../../schemas/transfer.schema";
+import { z } from "zod";
 
 export default function Transfer() {
   const user = useAuthStore((s) => s.user)!;
@@ -31,17 +20,19 @@ export default function Transfer() {
     reset,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
+  } = useForm<z.input<typeof transferSchema>>({
+    resolver: zodResolver(transferSchema),
   });
 
-  const amount = watch("amount");
+  const amount = watch("amount") ?? 0;
   const recipient = watch("recipient");
 
-  async function onSubmit(data: FormData) {
+  const onSubmit = async (data: z.input<typeof transferSchema>) => {
+    const parsed = transferSchema.parse(data);
+
     await createTransaction(user, {
-      title: `Transferência para ${data.recipient}: ${data.title}`,
-      amount: data.amount,
+      title: `Transferência para ${parsed.recipient}: ${parsed.title}`,
+      amount: parsed.amount,
       type: "expense",
     });
 
@@ -51,10 +42,11 @@ export default function Transfer() {
       `Transferência de ${new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
-      }).format(data.amount)} enviada para ${data.recipient}!`
+      }).format(parsed.amount)} enviada para ${parsed.recipient}!`
     );
+
     reset();
-  }
+  };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
@@ -140,7 +132,7 @@ export default function Transfer() {
               min="0.01"
               placeholder="0,00"
               className="bg-zinc-950 border-zinc-800 text-white placeholder:text-zinc-600 focus-visible:ring-cyan-500/40 focus-visible:border-cyan-500/60 h-11"
-              {...register("amount", { valueAsNumber: true })}
+              {...register("amount")}
             />
             {errors.amount && (
               <p className="text-red-400 text-xs">{errors.amount.message}</p>
