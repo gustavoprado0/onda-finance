@@ -24,7 +24,7 @@ export default function Transfer() {
     resolver: zodResolver(transferSchema),
   });
 
-  const amount = watch("amount") ?? 0;
+  const amount = (watch("amount") ?? 0) as number;
   const recipient = watch("recipient");
 
   const onSubmit = async (data: z.input<typeof transferSchema>) => {
